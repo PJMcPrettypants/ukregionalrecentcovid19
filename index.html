@@ -53,7 +53,7 @@
 
     <script type="text/javascript" src="scripts/lodash.js"></script>
     <script type="text/javascript" src="scripts/us-states.js"></script>
-    <script type="text/javascript" src="scripts/uk-ltlas.js"></script>
+    <script type="text/javascript" src="scripts/ltlas_v1.js"></script>
     <script
       type="text/javascript"
       src="scripts/coronavirus-cases_latest.js"
@@ -80,18 +80,19 @@
       // uk data
 
       const filteredData = ukData.features.filter(
-        ({ properties: { geo_code } }) => geo_code.match(/^E\w+/)
+        ({ properties: { lad19cd } }) => lad19cd.match(/^E\w+/)
       );
+
 
       const ukDataWithCovid = filteredData.map((data) => {
         const clonedData = _.cloneDeep(data);
 
         const areaCoronavirusData = coronavirusData.ltlas.find(
-          ({ areaCode }) => areaCode === clonedData.properties.geo_code
+          ({ areaCode }) => areaCode === clonedData.properties.lad19cd
         );
 
         if (!areaCoronavirusData) {
-          console.log(data.properties.label, "not found");
+          console.log(data.properties.lad19nm, "not found");
           clonedData.properties.cases = -1;
           return clonedData;
         }
@@ -115,7 +116,7 @@
         this._div.innerHTML =
           "<h4>UK Cases</h4>" +
           (props
-            ? "<b>" + props.name + "</b><br />" + props.cases + " cases"
+            ? "<b>" + props.lad19nm + "</b><br />" + props.cases + " cases"
             : "Hover over an area");
       };
 
