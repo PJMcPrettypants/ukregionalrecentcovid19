@@ -1,198 +1,216 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Recent Covid-19 Case Rates in UK Regions</title>
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <title>Recent Covid-19 Case Rates in UK Regions</title>
 
-    <link
-      rel="stylesheet"
-      href="scripts/leaflet.css"
-      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-      crossorigin=""
-    />
-    <script
-      src="scripts/leaflet.js"
-      integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-      crossorigin=""
-    ></script>
-    <style>
-      #map {
-        width: 800px;
-        height: 500px;
-      }
-      .info {
-        padding: 6px 8px;
-        font: 14px/16px Arial, Helvetica, sans-serif;
-        background: white;
-        background: rgba(255, 255, 255, 0.8);
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        border-radius: 5px;
-      }
-      .info h4 {
-        margin: 0 0 5px;
-        color: #777;
-      }
-      .legend {
-        text-align: left;
-        line-height: 18px;
-        color: #555;
-      }
-      .legend i {
-        width: 18px;
-        height: 18px;
-        float: left;
-        margin-right: 8px;
-        opacity: 0.7;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="mapid" style="width: 800px; height: 800px;"></div>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script type="text/javascript" src="scripts/lodash.js"></script>
-    <script type="text/javascript" src="scripts/us-states.js"></script>
-    <script type="text/javascript" src="scripts/ltlas_v1.js"></script>
-    <script
-      type="text/javascript"
-      src="scripts/coronavirus-cases_latest.js"
-    ></script>
+  <link rel="stylesheet" href="scripts/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+  <script src="scripts/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+  <style>
+    #map {
+      width: 800px;
+      height: 500px;
+    }
 
-    <script>
-      var mymap = L.map("mapid").setView([54.5, -5.0], 6);
+    .info {
+      padding: 6px 8px;
+      font: 14px/16px Arial, Helvetica, sans-serif;
+      background: white;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+    }
 
-      L.tileLayer(
-        "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
-        {
-          attribution:
-            'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-          maxZoom: 18,
-          id: "mapbox/dark-v10",
-          tileSize: 512,
-          zoomOffset: -1,
-          accessToken:
-            "pk.eyJ1IjoicGpzaGVsbGFyZCIsImEiOiJja2FwaWMxbHYwNGNsMnB0NTI3NGNiMGthIn0.28PXd5ueaH4-oqdwzEtZtA",
+    .info h4 {
+      margin: 0 0 5px;
+      color: #777;
+    }
+
+    .legend {
+      text-align: left;
+      line-height: 18px;
+      color: #555;
+    }
+
+    .legend i {
+      width: 18px;
+      height: 18px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mapid" style="width: 800px; height: 800px;"></div>
+
+  <script type="text/javascript" src="scripts/lodash.js"></script>
+  <script type="text/javascript" src="scripts/us-states.js"></script>
+  <script type="text/javascript" src="scripts/ltlas_v1.js"></script>
+  <script type="text/javascript" src="scripts/coronavirus-cases_latest.js"></script>
+
+  <script>
+    var mymap = L.map("mapid").setView([54.5, -5.0], 6);
+
+    L.tileLayer(
+      "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: "mapbox/dark-v10",
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: "pk.eyJ1IjoicGpzaGVsbGFyZCIsImEiOiJja2FwaWMxbHYwNGNsMnB0NTI3NGNiMGthIn0.28PXd5ueaH4-oqdwzEtZtA",
+      }
+    ).addTo(mymap);
+
+    // covid data
+    // uk data
+
+    const filteredData = ukData.features.filter(
+      ({
+        properties: {
+          lad19cd
         }
-      ).addTo(mymap);
+      }) => lad19cd.match(/^E\w+/)
+    );
 
-      // covid data
-      // uk data
 
-      const filteredData = ukData.features.filter(
-        ({ properties: { lad19cd } }) => lad19cd.match(/^E\w+/)
+    const ukDataWithCovid = filteredData.map((data) => {
+      const clonedData = _.cloneDeep(data);
+
+      const thisAreaCovidData = coronavirusData.ltlas.filter(
+        ({
+          areaCode
+        }) => areaCode === clonedData.properties.lad19cd
       );
 
+      if (thisAreaCovidData) {
 
-      const ukDataWithCovid = filteredData.map((data) => {
-        const clonedData = _.cloneDeep(data);
+        if (typeof (thisAreaCovidData[0]) == 'undefined') {
+          console.log(data.properties.lad19nm + " cases not found");
+        } else {
 
-        const areaCoronavirusData = coronavirusData.ltlas.find(
-          ({ areaCode }) => areaCode === clonedData.properties.lad19cd
-        );
+          clonedData.properties.cases = 0;
 
-        if (!areaCoronavirusData) {
-          console.log(data.properties.lad19nm, "not found");
-          clonedData.properties.cases = -1;
-          return clonedData;
+          for (let i = 0; i < 7; i++) {
+
+            clonedData.properties.cases += thisAreaCovidData[i].dailyLabConfirmedCases;
+
+          }
+
         }
 
-        clonedData.properties.cases =
-          areaCoronavirusData.dailyLabConfirmedCases;
 
+
+      } else {
+        console.log(data.properties.lad19nm + " not found");
+        clonedData.properties.cases = -1;
         return clonedData;
+      }
+
+
+      return clonedData;
+    });
+
+    // control that shows info on hover
+    var info = L.control();
+
+    info.onAdd = function (mymap) {
+      this._div = L.DomUtil.create("div", "info");
+      this.update();
+      return this._div;
+    };
+
+    info.update = function (props) {
+      this._div.innerHTML =
+        "<h4>UK Cases</h4>" +
+        (props ?
+          "<b>" + props.lad19nm + "</b><br />" + props.cases + " cases" :
+          "Hover over an area");
+    };
+
+    info.addTo(mymap);
+
+    function getColor(d) {
+      return d > 20 ?
+        "#800026" :
+        d > 10 ?
+        "#BD0026" :
+        d > 5 ?
+        "#E31A1C" :
+        d > 3 ?
+        "#FC4E2A" :
+        d > 2 ?
+        "#FD8D3C" :
+        d > 1 ?
+        "#FEB24C" :
+        d > 0 ?
+        "#FED976" :
+        d > -1 ?
+        "#FFEDA0" :
+        "#000000";
+    }
+
+    function style(feature) {
+      return {
+        fillColor: getColor(feature.properties.cases),
+        weight: 1,
+        opacity: 1,
+        color: "white",
+        dashArray: "3",
+        fillOpacity: 0.7,
+      };
+    }
+
+    function highlightFeature(e) {
+      var layer = e.target;
+
+      layer.setStyle({
+        weight: 3,
+        color: "#666",
+        dashArray: "",
+        fillOpacity: 0.7,
       });
 
-      // control that shows info on hover
-      var info = L.control();
-
-      info.onAdd = function (mymap) {
-        this._div = L.DomUtil.create("div", "info");
-        this.update();
-        return this._div;
-      };
-
-      info.update = function (props) {
-        this._div.innerHTML =
-          "<h4>UK Cases</h4>" +
-          (props
-            ? "<b>" + props.lad19nm + "</b><br />" + props.cases + " cases"
-            : "Hover over an area");
-      };
-
-      info.addTo(mymap);
-
-      function getColor(d) {
-        return d > 20
-          ? "#800026"
-          : d > 10
-          ? "#BD0026"
-          : d > 5
-          ? "#E31A1C"
-          : d > 3
-          ? "#FC4E2A"
-          : d > 2
-          ? "#FD8D3C"
-          : d > 1
-          ? "#FEB24C"
-          : d > 0
-          ? "#FED976"
-          : d > -1
-          ? "#FFEDA0"
-          : "#000000";
+      if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
       }
 
-      function style(feature) {
-        return {
-          fillColor: getColor(feature.properties.cases),
-          weight: 1,
-          opacity: 1,
-          color: "white",
-          dashArray: "3",
-          fillOpacity: 0.7,
-        };
-      }
+      info.update(layer.feature.properties);
+    }
 
-      function highlightFeature(e) {
-        var layer = e.target;
+    var geojson;
 
-        layer.setStyle({
-          weight: 3,
-          color: "#666",
-          dashArray: "",
-          fillOpacity: 0.7,
-        });
+    function resetHighlight(e) {
+      geojson.resetStyle(e.target);
+      info.update();
+    }
 
-        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-          layer.bringToFront();
-        }
+    function zoomToFeature(e) {
+      mymap.fitBounds(e.target.getBounds());
+    }
 
-        info.update(layer.feature.properties);
-      }
+    function onEachFeature(feature, layer) {
+      layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature,
+      });
+    }
 
-      var geojson;
+    geojson = L.geoJson(ukDataWithCovid, {
+      style: style,
+      onEachFeature: onEachFeature,
+    }).addTo(mymap);
+  </script>
+</body>
 
-      function resetHighlight(e) {
-        geojson.resetStyle(e.target);
-        info.update();
-      }
-
-      function zoomToFeature(e) {
-        mymap.fitBounds(e.target.getBounds());
-      }
-
-      function onEachFeature(feature, layer) {
-        layer.on({
-          mouseover: highlightFeature,
-          mouseout: resetHighlight,
-          click: zoomToFeature,
-        });
-      }
-
-      geojson = L.geoJson(ukDataWithCovid, {
-        style: style,
-        onEachFeature: onEachFeature,
-      }).addTo(mymap);
-    </script>
-  </body>
 </html>
