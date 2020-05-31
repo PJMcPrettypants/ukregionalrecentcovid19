@@ -55,6 +55,7 @@
   <script type="text/javascript" src="scripts/lodash.js"></script>
   <script type="text/javascript" src="scripts/us-states.js"></script>
   <script type="text/javascript" src="scripts/ltlas_v1.js"></script>
+  <script type="text/javascript" src="scripts/population.js"></script>
   <script type="text/javascript" src="scripts/coronavirus-cases_latest.js"></script>
 
   <script>
@@ -92,11 +93,18 @@
         }) => areaCode === clonedData.properties.lad19cd
       );
 
+      //console.log (data.properties.lad19nm + " population is " + populations[clonedData.properties.lad19cd]);
+
+      clonedData.properties.population = populations[clonedData.properties.lad19cd];
+      
+
       if (thisAreaCovidData) {
 
         if (typeof (thisAreaCovidData[0]) == 'undefined') {
           console.log(data.properties.lad19nm + " cases not found");
         } else {
+
+          clonedData.properties.name = thisAreaCovidData[0].areaName;
 
           clonedData.properties.cases = 0;
 
@@ -106,9 +114,11 @@
 
           }
 
+          clonedData.properties.ratePer100k = clonedData.properties.cases / (clonedData.properties.population/100000);
+
         }
 
-
+        
 
       } else {
         console.log(data.properties.lad19nm + " not found");
@@ -131,9 +141,9 @@
 
     info.update = function (props) {
       this._div.innerHTML =
-        "<h4>UK Cases</h4>" +
+        "<h4>Confirmed Cases in Last 7 Days</h4>" +
         (props ?
-          "<b>" + props.lad19nm + "</b><br />" + props.cases + " cases" :
+          props.name + "<br />"  + props.ratePer100k.toPrecision(3) + " cases per 100k people <br />(" + props.cases + " cases, population: " + props.population +")":
           "Hover over an area");
     };
 
@@ -161,9 +171,9 @@
 
     function style(feature) {
       return {
-        fillColor: getColor(feature.properties.cases),
+        fillColor: getColor(feature.properties.ratePer100k),
         weight: 1,
-        opacity: 1,
+        opacity: 0,
         color: "white",
         dashArray: "3",
         fillOpacity: 0.7,
@@ -174,9 +184,10 @@
       var layer = e.target;
 
       layer.setStyle({
-        weight: 3,
-        color: "#666",
-        dashArray: "",
+        weight: 2,
+        color: "white",
+        dashArray: "3",
+        opacity: 0.5,
         fillOpacity: 0.7,
       });
 
